@@ -72,6 +72,12 @@ def add_datas(eng):
 
 
 def print_stmt_with_scalars(stmt, eng):
+    """
+        Adequada para recuperar e imprimir valores únicos da primeira coluna do resultado.
+        Pode ser menos eficiente se você espera muitos resultados, pois ele busca cada valor individualmente.
+            :param stmt: intrução sql
+            :param eng: engine com a conexão ao BD
+    """
     print('>>>')
     with Session(eng) as session:
         for record in session.scalars(stmt):
@@ -80,15 +86,30 @@ def print_stmt_with_scalars(stmt, eng):
 
 
 def print_stmt_with_execute(stmt, eng):
+    """
+        Oferece mais flexibilidade, imprimindo o objeto ResultProxy e permitindo a iteração por registros individuais.
+        Executa a instrução SQL e retorna um objeto de resultado do SQLAlchemy.
+        Este objeto contém todos os dados recuperados da consulta,
+        incluindo os valores e os metadados (nomes de colunas)
+            :param stmt: intrução sql
+            :param eng: engine com a conexão ao BD
+    """
     print('>>>')
     with Session(eng) as session:
         results = session.execute(stmt)
-        print(results)
         for record in results:
             print(record)
     print('-'*50)
 
+
 def print_stmt_with_fetch(stmt, eng):
+    """
+        Oferece mais flexibilidade, imprimindo o objeto ResultProxy e permitindo a iteração por registros individuais.
+        Usa fetchall para recuperar todos os resultados da consulta em uma lista de tuplas de uma só vez.
+        Isso carrega todos os dados em memória, o que pode ser ineficiente para grandes conjuntos de dados.
+            :param stmt: intrução sql
+            :param eng: engine com a conexão ao BD
+    """
     print('>>>')
     with Session(eng) as session:
         results = session.execute(stmt).fetchall()
